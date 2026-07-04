@@ -11,7 +11,7 @@ services:
     container_name: photo-portfolio
     restart: unless-stopped
     ports:
-      - "8080:8000"
+      - "8090:8000"
     environment:
       SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY to a long random string}
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}

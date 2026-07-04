@@ -69,7 +69,7 @@ cp .env.example .env        # then edit SECRET_KEY and ADMIN_PASSWORD
 docker compose up -d --build
 ```
 
-Visit http://localhost:8080 — admin at http://localhost:8080/admin.
+Visit http://localhost:8090 — admin at http://localhost:8090/admin.
 
 ### Deploy on Portainer
 
