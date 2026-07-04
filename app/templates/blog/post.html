@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — {{ request.state.site.site_title }}{% endblock %}
+{% block description %}{{ post.excerpt or post.title }}{% endblock %}
+
+{% block content %}
+<article class="prose blog-post">
+  <div class="page-head">
+    <a class="back-link" href="/blog">&larr; All posts</a>
+    <h1>{{ post.title }}</h1>
+    <p class="muted">{{ post.created_at | humandate }}</p>
+  </div>
+
+  {% if post.cover_image %}
+  <img class="blog-cover" src="{{ blog_image_url(post.cover_image) }}" alt="" />
+  {% endif %}
+
+  <div class="post-body">
+    {{ post.body | markdown }}
+  </div>
+
+  {% if post.gallery %}
+  <div class="blog-gallery masonry">
+    {% for image in post.gallery %}
+    <figure class="masonry-item">
+      <a href="{{ blog_image_url(image.filename) }}" data-lightbox data-caption="">
+        <img loading="lazy" decoding="async" src="{{ blog_image_url(image.filename) }}" alt="" />
+      </a>
+    </figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+</article>
+{% endblock %}
+
+{% block scripts %}<script src="/static/js/lightbox.js"></script>{% endblock %}

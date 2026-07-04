@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ album.title }} — {{ request.state.site.site_title }}{% endblock %}
+{% block description %}{{ album.description or album.title }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <a class="back-link" href="/">&larr; All albums</a>
+  <h1>{{ album.title }}</h1>
+  {% if album.description %}<p class="lead">{{ album.description }}</p>{% endif %}
+  <p class="muted">{{ album.photo_count }} photo{{ '' if album.photo_count == 1 else 's' }}</p>
+</div>
+
+{% if album.photos %}
+<div class="masonry">
+  {% for photo in album.photos %}
+  <figure class="masonry-item">
+    <a href="{{ image_url(photo.album_id, photo.filename) }}"
+       data-lightbox
+       data-caption="{{ photo.caption or photo.title or '' }}">
+      <img loading="lazy" decoding="async"
+           src="{{ thumb_url(photo.album_id, photo.filename) }}"
+           alt="{{ photo.title or photo.original_name }}"
+           {% if photo.width and photo.height %}width="{{ photo.width }}" height="{{ photo.height }}"{% endif %} />
+    </a>
+    {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
+  </figure>
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty">No photos in this album yet.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}<script src="/static/js/lightbox.js"></script>{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Blog — Admin{% endblock %}
+
+{% block admin_content %}
+<header class="admin-head">
+  <h1>Blog posts</h1>
+  <a class="btn btn-primary" href="/admin/blog/new">New post</a>
+</header>
+
+{% if posts %}
+<ul class="admin-list">
+  {% for post in posts %}
+  <li class="admin-list-row">
+    <span class="status-pill {{ 'is-published' if post.published else 'is-draft' }}">
+      {{ 'Published' if post.published else 'Draft' }}
+    </span>
+    <a class="row-title" href="/admin/blog/{{ post.id }}">{{ post.title }}</a>
+    <span class="muted">{{ post.created_at | humandate('short') }}</span>
+    <form method="post" action="/admin/blog/{{ post.id }}/delete" class="inline-form"
+          onsubmit="return confirm('Delete this post?');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+      <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No posts yet. <a href="/admin/blog/new">Write your first post</a>.</p>
+{% endif %}
+{% endblock %}

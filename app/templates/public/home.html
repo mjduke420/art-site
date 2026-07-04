@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <h1 class="hero-title">{{ request.state.site.site_title }}</h1>
+  <p class="hero-tagline">{{ request.state.site.tagline }}</p>
+</section>
+
+<section class="album-grid" aria-label="Albums">
+  {% for album in albums %}
+  <a class="album-card" href="/albums/{{ album.slug }}">
+    <div class="album-cover">
+      {% if album.cover_photo %}
+        <img loading="lazy" decoding="async"
+             src="{{ thumb_url(album.cover_photo.album_id, album.cover_photo.filename) }}"
+             alt="{{ album.title }}" />
+      {% else %}
+        <div class="album-cover--empty">No photos yet</div>
+      {% endif %}
+    </div>
+    <div class="album-meta">
+      <span class="album-title">{{ album.title }}</span>
+      <span class="album-count">{{ album.photo_count }} photo{{ '' if album.photo_count == 1 else 's' }}</span>
+    </div>
+  </a>
+  {% else %}
+  <p class="empty">No albums yet.</p>
+  {% endfor %}
+</section>
+
+{% if recent_posts %}
+<section class="recent-posts">
+  <h2 class="section-title">From the blog</h2>
+  <div class="post-teasers">
+    {% for post in recent_posts %}
+    <a class="post-teaser" href="/blog/{{ post.slug }}">
+      {% if post.cover_image %}
+      <div class="post-teaser-cover">
+        <img loading="lazy" src="{{ blog_image_url(post.cover_image) }}" alt="" />
+      </div>
+      {% endif %}
+      <h3>{{ post.title }}</h3>
+      {% if post.excerpt %}<p>{{ post.excerpt }}</p>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

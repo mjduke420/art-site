@@ -1,0 +1,74 @@
+{% extends "admin/base.html" %}
+
+{% set editing = post is not none %}
+
+{% block title %}{{ 'Edit post' if editing else 'New post' }} — Admin{% endblock %}
+
+{% block admin_content %}
+<header class="admin-head">
+  <div>
+    <a class="back-link" href="/admin/blog">&larr; Blog</a>
+    <h1>{{ 'Edit post' if editing else 'New post' }}</h1>
+  </div>
+</header>
+
+<section class="panel">
+  <form method="post" action="{{ '/admin/blog/' ~ post.id if editing else '/admin/blog' }}"
+        enctype="multipart/form-data" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+
+    <label>Title
+      <input name="title" value="{{ post.title if editing else '' }}" required autofocus />
+    </label>
+
+    <label>Excerpt <span class="muted">(short summary shown in lists)</span>
+      <input name="excerpt" value="{{ post.excerpt if editing else '' }}" maxlength="400" />
+    </label>
+
+    <label>Body <span class="muted">(Markdown supported)</span>
+      <textarea name="body" rows="16" class="mono">{{ post.body if editing else '' }}</textarea>
+    </label>
+
+    <label>Cover image
+      <input type="file" name="cover" accept="image/*" />
+    </label>
+
+    {% if editing and post.cover_image %}
+    <div class="current-cover">
+      <img src="{{ blog_image_url(post.cover_image) }}" alt="" />
+      <label class="checkbox">
+        <input type="checkbox" name="remove_cover" value="1" /> Remove current cover
+      </label>
+    </div>
+    {% endif %}
+
+    <label>Gallery images <span class="muted">(up to {{ max_gallery }} — great for trips or photo series)</span>
+      <input type="file" name="gallery" accept="image/*" multiple />
+    </label>
+
+    {% if editing and post.gallery %}
+    <div class="gallery-edit">
+      <p class="muted">{{ post.gallery|length }} of {{ max_gallery }} used. Tick any image to remove it on save.</p>
+      <div class="gallery-edit-grid">
+        {% for image in post.gallery %}
+        <label class="gallery-edit-item">
+          <img src="{{ blog_image_url(image.filename) }}" alt="" />
+          <span class="checkbox"><input type="checkbox" name="remove_images" value="{{ image.id }}" /> Remove</span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <label class="checkbox">
+      <input type="checkbox" name="published" value="1" {{ 'checked' if editing and post.published else '' }} />
+      Published
+    </label>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">{{ 'Save changes' if editing else 'Create post' }}</button>
+      <a class="btn btn-ghost" href="/admin/blog">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

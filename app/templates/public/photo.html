@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ photo.title or photo.original_name }} — {{ request.state.site.site_title }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <a class="back-link" href="/albums/{{ photo.album.slug }}">&larr; {{ photo.album.title }}</a>
+</div>
+
+<figure class="photo-detail">
+  <img src="{{ image_url(photo.album_id, photo.filename) }}"
+       alt="{{ photo.title or photo.original_name }}" />
+  <figcaption>
+    {% if photo.title %}<h1>{{ photo.title }}</h1>{% endif %}
+    {% if photo.caption %}<p>{{ photo.caption }}</p>{% endif %}
+    {% if photo.taken_at %}<p class="muted">Taken {{ photo.taken_at | humandate }}</p>{% endif %}
+  </figcaption>
+</figure>
+{% endblock %}

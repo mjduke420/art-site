@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+
+{% block title %}New album — Admin{% endblock %}
+
+{% block admin_content %}
+<header class="admin-head">
+  <div>
+    <a class="back-link" href="/admin/albums">&larr; Albums</a>
+    <h1>New album</h1>
+  </div>
+</header>
+
+<section class="panel">
+  <form method="post" action="/admin/albums" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+    <label>Title
+      <input name="title" required autofocus />
+    </label>
+    <label>Description
+      <textarea name="description" rows="4"></textarea>
+    </label>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Create album</button>
+      <a class="btn btn-ghost" href="/admin/albums">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

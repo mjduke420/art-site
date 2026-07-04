@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+
+{% block admin_content %}
+<header class="admin-head">
+  <h1>Dashboard</h1>
+  <a class="btn btn-primary" href="/admin/albums/new">New album</a>
+</header>
+
+<div class="stat-cards">
+  <div class="stat"><span class="stat-num">{{ stats.albums }}</span><span class="stat-label">Albums</span></div>
+  <div class="stat"><span class="stat-num">{{ stats.photos }}</span><span class="stat-label">Photos</span></div>
+  <div class="stat"><span class="stat-num">{{ stats.posts }}</span><span class="stat-label">Blog posts</span></div>
+</div>
+
+<section class="panel">
+  <h2>Recent albums</h2>
+  {% if recent_albums %}
+  <ul class="admin-list">
+    {% for album in recent_albums %}
+    <li>
+      <a href="/admin/albums/{{ album.id }}">{{ album.title }}</a>
+      <span class="muted">{{ album.photo_count }} photo{{ '' if album.photo_count == 1 else 's' }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">No albums yet. <a href="/admin/albums/new">Create one</a>.</p>
+  {% endif %}
+</section>
+{% endblock %}

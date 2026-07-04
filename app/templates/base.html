@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#121214" />
+  <title>{% block title %}{{ request.state.site.site_title }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ request.state.site.tagline }}{% endblock %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" />
+  <link rel="stylesheet" href="/static/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%93%B7</text></svg>" />
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">{{ request.state.site.site_title }}</a>
+      <nav class="site-nav">
+        <a href="/"{% if request.url.path == '/' %} class="active"{% endif %}>Photos</a>
+        <a href="/blog"{% if request.url.path.startswith('/blog') %} class="active"{% endif %}>Blog</a>
+        <a href="/about"{% if request.url.path == '/about' %} class="active"{% endif %}>About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container site-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> {{ request.state.site.site_title }} — All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

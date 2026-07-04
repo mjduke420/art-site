@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Albums — Admin{% endblock %}
+
+{% block admin_content %}
+<header class="admin-head">
+  <h1>Albums</h1>
+  <a class="btn btn-primary" href="/admin/albums/new">New album</a>
+</header>
+
+{% if albums %}
+<p class="muted">Drag rows to reorder how albums appear on the site.</p>
+<ul class="reorder-list" id="album-sortable" data-reorder-url="/admin/albums/reorder">
+  {% for album in albums %}
+  <li class="reorder-row" draggable="true" data-id="{{ album.id }}">
+    <span class="drag-handle" title="Drag to reorder">&#x2630;</span>
+    <span class="thumb-mini">
+      {% if album.cover_photo %}
+      <img src="{{ thumb_url(album.cover_photo.album_id, album.cover_photo.filename) }}" alt="" />
+      {% endif %}
+    </span>
+    <a class="row-title" href="/admin/albums/{{ album.id }}">{{ album.title }}</a>
+    <span class="muted">{{ album.photo_count }} photo{{ '' if album.photo_count == 1 else 's' }}</span>
+    <form method="post" action="/admin/albums/{{ album.id }}/delete" class="inline-form"
+          onsubmit="return confirm('Delete this album and all its photos? This cannot be undone.');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+      <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+<input type="hidden" id="reorder-csrf" value="{{ csrf_token(request) }}" />
+{% else %}
+<p class="empty">No albums yet. <a href="/admin/albums/new">Create your first album</a>.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}<script src="/static/js/admin.js"></script>{% endblock %}

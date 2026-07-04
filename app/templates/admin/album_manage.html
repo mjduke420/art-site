@@ -1,0 +1,88 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ album.title }} — Admin{% endblock %}
+
+{% block admin_content %}
+<header class="admin-head">
+  <div>
+    <a class="back-link" href="/admin/albums">&larr; Albums</a>
+    <h1>{{ album.title }}</h1>
+  </div>
+  <a class="btn btn-ghost" href="/albums/{{ album.slug }}" target="_blank">View &nearr;</a>
+</header>
+
+<section class="panel">
+  <h2>Album details</h2>
+  <form method="post" action="/admin/albums/{{ album.id }}" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+    <label>Title
+      <input name="title" value="{{ album.title }}" required />
+    </label>
+    <label>Description
+      <textarea name="description" rows="3">{{ album.description }}</textarea>
+    </label>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Save details</button>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Upload photos</h2>
+  <form method="post" action="/admin/albums/{{ album.id }}/upload"
+        enctype="multipart/form-data" class="upload-form" id="upload-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+    <label class="dropzone" id="dropzone">
+      <input type="file" name="files" id="file-input" multiple accept="image/*" hidden />
+      <span class="dropzone-text">Drag &amp; drop images here, or click to choose</span>
+      <ul class="file-list" id="file-list"></ul>
+    </label>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Upload</button>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Photos ({{ album.photo_count }})</h2>
+  {% if album.photos %}
+  <p class="muted">Drag photos to reorder. The starred photo is the album cover.</p>
+  <div class="photo-admin-grid" id="photo-sortable" data-reorder-url="/admin/photos/reorder">
+    {% for photo in album.photos %}
+    <div class="photo-admin-card{% if album.cover_photo_id == photo.id %} is-cover{% endif %}"
+         draggable="true" data-id="{{ photo.id }}">
+      <div class="photo-admin-thumb">
+        <img src="{{ thumb_url(photo.album_id, photo.filename) }}" alt="" />
+        {% if album.cover_photo_id == photo.id %}<span class="cover-badge" title="Album cover">&#9733;</span>{% endif %}
+      </div>
+      <details class="photo-edit">
+        <summary>Edit</summary>
+        <form method="post" action="/admin/photos/{{ photo.id }}" class="form-compact">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+          <input name="title" value="{{ photo.title }}" placeholder="Title" />
+          <input name="caption" value="{{ photo.caption }}" placeholder="Caption" />
+          <button class="btn btn-sm btn-primary" type="submit">Save</button>
+        </form>
+        <div class="photo-actions">
+          <form method="post" action="/admin/photos/{{ photo.id }}/cover" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+            <button class="btn btn-sm btn-ghost" type="submit">Set cover</button>
+          </form>
+          <form method="post" action="/admin/photos/{{ photo.id }}/delete" class="inline-form"
+                onsubmit="return confirm('Delete this photo?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+          </form>
+        </div>
+      </details>
+    </div>
+    {% endfor %}
+  </div>
+  <input type="hidden" id="reorder-csrf" value="{{ csrf_token(request) }}" />
+  {% else %}
+  <p class="muted">No photos yet. Upload some above.</p>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}<script src="/static/js/admin.js"></script>{% endblock %}

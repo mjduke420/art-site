@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#121214" />
+  <title>{% block title %}Admin — {{ request.state.site.site_title }}{% endblock %}</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" />
+  <link rel="stylesheet" href="/static/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%93%B7</text></svg>" />
+</head>
+<body class="admin">
+  <aside class="admin-sidebar">
+    <a class="admin-brand" href="/admin">{{ request.state.site.site_title }}<small>admin</small></a>
+    <nav class="admin-nav">
+      <a href="/admin"{% if request.url.path == '/admin' %} class="active"{% endif %}>Dashboard</a>
+      <a href="/admin/albums"{% if request.url.path.startswith('/admin/albums') %} class="active"{% endif %}>Albums</a>
+      <a href="/admin/blog"{% if request.url.path.startswith('/admin/blog') %} class="active"{% endif %}>Blog</a>
+      <a href="/admin/settings"{% if request.url.path.startswith('/admin/settings') %} class="active"{% endif %}>Settings</a>
+      <a href="/" target="_blank" class="view-site">View site &nearr;</a>
+    </nav>
+    <form method="post" action="/admin/logout" class="logout-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+      <button type="submit" class="btn btn-ghost btn-block">Log out</button>
+    </form>
+  </aside>
+
+  <main class="admin-main">
+    {% block admin_content %}{% endblock %}
+  </main>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

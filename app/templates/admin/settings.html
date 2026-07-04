@@ -1,0 +1,51 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Settings — Admin{% endblock %}
+
+{% block admin_content %}
+<header class="admin-head">
+  <h1>Site settings</h1>
+</header>
+
+<section class="panel">
+  <form method="post" action="/admin/settings" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+    <label>Site title
+      <input name="site_title" value="{{ values.site_title }}" required />
+    </label>
+    <label>Tagline
+      <input name="tagline" value="{{ values.tagline }}" />
+    </label>
+    <label>About text
+      <textarea name="about" rows="5">{{ values.about }}</textarea>
+    </label>
+    <label>Contact email
+      <input type="email" name="contact_email" value="{{ values.contact_email }}" />
+    </label>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Save settings</button>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Change password</h2>
+  {% if password_error %}<p class="form-error">{{ password_error }}</p>{% endif %}
+  {% if password_success %}<p class="form-success">{{ password_success }}</p>{% endif %}
+  <form method="post" action="/admin/settings/password" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+    <label>Current password
+      <input type="password" name="current_password" autocomplete="current-password" required />
+    </label>
+    <label>New password
+      <input type="password" name="new_password" autocomplete="new-password" minlength="8" required />
+    </label>
+    <label>Confirm new password
+      <input type="password" name="confirm_password" autocomplete="new-password" minlength="8" required />
+    </label>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Update password</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

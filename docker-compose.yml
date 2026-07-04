@@ -1,0 +1,26 @@
+# Deploy as a Portainer stack (or `docker compose up -d`).
+# Set SECRET_KEY and ADMIN_PASSWORD in Portainer's stack environment / .env.
+services:
+  portfolio:
+    # Portainer builds this image on the host from the repo it cloned.
+    # pull_policy: build ensures it builds rather than trying to pull a
+    # registry image (which is what caused "pull access denied").
+    build: .
+    image: photo-portfolio:latest
+    pull_policy: build
+    container_name: photo-portfolio
+    restart: unless-stopped
+    ports:
+      - "8080:8000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY to a long random string}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD}
+      SITE_TITLE: ${SITE_TITLE:-Portfolio}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
+      DATA_DIR: /data
+    volumes:
+      - portfolio_data:/data
+
+volumes:
+  portfolio_data:

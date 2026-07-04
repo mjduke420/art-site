@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}About — {{ request.state.site.site_title }}{% endblock %}
+
+{% block content %}
+<div class="prose">
+  <h1>About</h1>
+  <p>{{ request.state.site.about }}</p>
+
+  {% if request.state.site.contact_email %}
+  <h2>Contact</h2>
+  <p>
+    For questions and prints, send me an
+    <a href="mailto:{{ request.state.site.contact_email }}">email</a>.
+  </p>
+  {% endif %}
+</div>
+{% endblock %}

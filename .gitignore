@@ -1,0 +1,24 @@
+# Runtime data (SQLite db + uploaded images) — lives in a Docker volume
+/data/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+
+# Tooling
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Local tooling / session artifacts
+.claude/
+data_smoke/
+*.log

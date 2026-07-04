@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#121214" />
+  <title>Admin sign in — {{ request.state.site.site_title }}</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" />
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body class="admin-login">
+  <form method="post" action="/admin/login" class="login-card">
+    <h1>{{ request.state.site.site_title }}</h1>
+    <p class="muted">Admin sign in</p>
+    {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}" />
+    <label>Username
+      <input name="username" autocomplete="username" required autofocus />
+    </label>
+    <label>Password
+      <input type="password" name="password" autocomplete="current-password" required />
+    </label>
+    <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+    <a class="muted back-home" href="/">&larr; Back to site</a>
+  </form>
+</body>
+</html>

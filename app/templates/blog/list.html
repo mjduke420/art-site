@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Blog — {{ request.state.site.site_title }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Blog</h1>
+</div>
+
+{% if posts %}
+<div class="post-list">
+  {% for post in posts %}
+  <article class="post-row">
+    {% if post.cover_image %}
+    <a class="post-row-cover" href="/blog/{{ post.slug }}">
+      <img loading="lazy" src="{{ blog_image_url(post.cover_image) }}" alt="" />
+    </a>
+    {% endif %}
+    <div class="post-row-body">
+      <h2><a href="/blog/{{ post.slug }}">{{ post.title }}</a></h2>
+      <p class="muted">{{ post.created_at | humandate }}</p>
+      {% if post.excerpt %}<p>{{ post.excerpt }}</p>{% endif %}
+      <a class="read-more" href="/blog/{{ post.slug }}">Read more &rarr;</a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty">No posts yet.</p>
+{% endif %}
+{% endblock %}
